@@ -56,4 +56,21 @@ class OrdersController < ApplicationController
     order
   end
 
+  def enhanced_order
+    product_id_array = Array.new
+    product_quantity_array = Array.new
+    LineItem.where(order_id: params[:id]).each {|order| product_id_array << order.product_id }
+    LineItem.where(order_id: params[:id]).each {|order| product_quantity_array << order.quantity }
+    puts product_id_array
+    puts product_quantity_array
+
+    @enhanced_order ||= Product.where(id: product_id_array).map.with_index {|product, idx| { product:product, quantity: product_quantity_array[idx]} }
+  end
+  helper_method :enhanced_order
+
+  def order_subtotal_cents
+    enhanced_order.map {|entry| entry[:product].price_cents * entry[:quantity]}.sum
+  end
+  helper_method :order_subtotal_cents
+
 end
