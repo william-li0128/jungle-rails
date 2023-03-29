@@ -58,6 +58,8 @@ group :development, :test do
   # Add the rspec and net-smtp gems
   gem 'rspec-rails', '~> 5.1'
   gem 'net-smtp', require: false
+  gem "cypress-rails"
+  gem 'database_cleaner-active_record'
 end
 
 group :development do
